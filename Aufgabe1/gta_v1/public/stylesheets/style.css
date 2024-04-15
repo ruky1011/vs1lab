@@ -49,14 +49,14 @@ a {
 input{
   display: block;
   
-  width: 200px;
+  width: 80%;
   height: 35px;
 
   margin-bottom: 15px;
 }
 
 ul li {
-  width: 180px;
+  width: 90%;
   height: 50px;
   border: 1px solid #FFE1FF;
   background-color: #FFE1FF;
@@ -78,6 +78,10 @@ legend {
 
 h2 {
   margin-bottom: 20px;
+}
+
+img {
+  border-radius: 8px;
 }
 
 
@@ -145,7 +149,7 @@ h2 {
   /*display: flex;*/
   flex-direction: row;
   align-items: center;
-  line-height: 30%; /* ?? */
+  line-height: 150px;
   padding-left: 50px;
   padding-right: 50px;
   background-color: #FFE1FF;
@@ -181,7 +185,7 @@ h2 {
 
 
 .tagging_fields {
-  display: block;
+  padding-left: 5%;
 }
 
 /* ### TODO ### Styles for Discovery component */
@@ -197,7 +201,7 @@ h2 {
 }
 
 .discovery__search_fields {
-  
+  padding-left: 2%;
 }
 
 #search {
@@ -209,6 +213,7 @@ h2 {
 }
 
 .discovery__map {
+  
 
 }
 
@@ -227,4 +232,22 @@ h2 {
 
 /* ### TODO ### Media Queries */
 
-/* ... your code here ... */
+@media (width < 863.2px ) {
+  .main {
+    flex-direction: column;
+  }
+
+  .col-3 { /*schoener machen!!*/
+    width: calc(100% - 1rem);
+  }
+
+  .col-9{
+    width: calc(100% - 1rem);
+  }
+
+  .discovery__wrapper {
+    display: flex;
+    flex-direction: column;
+  }
+  
+}
