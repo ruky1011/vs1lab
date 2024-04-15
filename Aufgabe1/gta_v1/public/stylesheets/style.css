@@ -222,11 +222,6 @@ img {
   font-weight: bold;
 }
 
-.discovery__map {
-  
-
-}
-
 /* ### TODO ### Styles for Footer Component */
 
 .footer{
@@ -247,11 +242,15 @@ img {
     flex-direction: column;
   }
 
-  .col-3 { /*schoener machen!!*/
+  .main__tagging {
     width: calc(100% - 1rem);
   }
 
-  .col-9{
+  .discovery__taglist{
+    width: calc(100% - 1rem);
+  }
+
+  .main__discovery{
     width: calc(100% - 1rem);
   }
 
