@@ -46,7 +46,39 @@ a {
 
 /* ### TODO ### Styles for other HTML elements */
 
-/* ... your code here ... */
+input{
+  display: block;
+  
+  width: 200px;
+  height: 35px;
+
+  margin-bottom: 15px;
+}
+
+ul li {
+  width: 180px;
+  height: 50px;
+  border: 1px solid #FFE1FF;
+  background-color: #FFE1FF;
+  border-radius: 5px;
+  list-style-type: none;
+  margin-bottom: 12px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  color: #7A7A7A;
+}
+
+legend {
+  margin-bottom: 15px;
+  margin-left: 10px;
+}
+
+h2 {
+  margin-bottom: 20px;
+}
 
 
 /* Grid styles (no changes required) */
@@ -109,27 +141,88 @@ a {
 
 /* ### TODO ### Styles for Header Component */
 
-/* ... your code here ... */
+.header {
+  /*display: flex;*/
+  flex-direction: row;
+  align-items: center;
+  line-height: 30%; /* ?? */
+  padding-left: 50px;
+  padding-right: 50px;
+  background-color: #FFE1FF;
+}
+
+.header__image{
+  width: 50px;
+}
 
 
 /* ### TODO ### Styles for Main Component */
 
-/* ... your code here ... */
+.main {
+  flex-direction: row;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  
+  padding-top: 2%;
+  padding-bottom: 2%;
+  padding-left: 2%;
+  padding-right: 2%;
+
+  margin: auto;
+}
 
 
 /* ### TODO ### Styles for Tagging component */
 
-/* ... your code here ... */
+.main__tagging {
+  flex-direction: column;
+  justify-content: space-evenly;
+}
 
+
+.tagging_fields {
+  display: block;
+}
 
 /* ### TODO ### Styles for Discovery component */
 
-/* ... your code here ... */
+.main__discovery {
+  flex-direction: column;
+}
 
+.discovery__search{
+  flex-direction: column;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.discovery__search_fields {
+  
+}
+
+#search {
+  display: block;
+}
+
+.discovery__wrapper{
+  font-weight: bold;
+}
+
+.discovery__map {
+
+}
 
 /* ### TODO ### Styles for Footer Component */
 
-/* ... your code here ... */
+.footer{
+  /*display: flex;*/
+  align-items: center;
+  background-color: #FFE1FF;
+  padding-bottom: 0px;
+  padding-left: 50px;
+  line-height: 150px;
+  font-weight: bold;
+}
 
 
 /* ### TODO ### Media Queries */
