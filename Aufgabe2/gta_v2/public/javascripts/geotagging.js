@@ -116,9 +116,56 @@ class MapManager {
  * A function to retrieve the current location and update the page.
  * It is called once the page has been fully loaded.
  */
-// ... your code here ...
+function updateLocation() {
+
+    //Benoetigte Felder finden und speichern
+    let latitudeFieldTag = document.getElementById('latitude');
+    let longitudeFieldTag = document.getElementById('longitude');
+    let latitudeFieldDiscovery = document.getElementById('latitude_search');
+    let longitudeFieldDiscovery = document.getElementById('longitude_search');
+    let mapView = document.getElementById("mapView");
+    let map = document.createElement("div");
+    let discoveryMap = document.getElementById("discoveryMap");
+
+    //MapManager initalisieren
+    let mapManager = new MapManager();
+
+    // #### Callback Methode aufrufen (finden der aktuellen Position) #### 
+    LocationHelper.findLocation((helper) => {
+    
+        // ###### Position aktualisieren ######
+
+        //Aktuelle Position speichern
+        let latitude = helper.latitude;
+        let longitude = helper.longitude;
+
+        //Aktuelle Position in die Felder des Tagging Formulars schreiben
+        latitudeFieldTag.value = latitude;
+        longitudeFieldTag.value = longitude;
+
+        //Aktuelle Position in die Felder des Discovery Formulars schreiben
+        latitudeFieldDiscovery.value = latitude;
+        longitudeFieldDiscovery.value = longitude;
+
+        // ###### Map aktualisieren ######
+
+        //Container fuer Map erzeugen
+        map.setAttribute("id", "map");
+        discoveryMap.appendChild(map);
+
+        //Map mit aktueller Positon aktualisieren
+        mapManager.initMap(latitude,longitude);
+        mapManager.updateMarkers(latitude,longitude);
+
+        //Platzhalter der Map entfernen
+        mapView.nextElementSibling.remove();
+        mapView.remove();
+    
+    }) ;
+}
 
 // Wait for the page to fully load its DOM content, then call updateLocation
 document.addEventListener("DOMContentLoaded", () => {
-    alert("Please change the script 'geotagging.js'");
+    //alert("Please change the script 'geotagging.js'");
+    updateLocation();
 });
