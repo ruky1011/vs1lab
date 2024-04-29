@@ -9,14 +9,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GeoTagApp</title>
     <link rel="stylesheet" href="./stylesheets/style.css" />
-     <!-- Leaflet CSS and JavaScript (in this order) -->
-     <link rel='stylesheet' href='https://unpkg.com/leaflet@1.9.4/dist/leaflet.css'
-     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-     crossorigin=""/>
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-     crossorigin=""></script>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Leaflet CSS and JavaScript (in this order) -->
+    <link rel='stylesheet' href='https://unpkg.com/leaflet@1.9.4/dist/leaflet.css'
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""/>
+   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""></script>
 </head>
 
 <body>
@@ -43,9 +42,9 @@
                     <label for="longitude">Longitude:</label>
                     <input type="text" name="longitude" id="longitude" value = "8.400728171945046" readonly/>
                     <label for="name">Name:</label>
-                    <input type="text" name="name" id="name" placeholder="e.g. Central Berlin" maxlength="10" required/>
+                    <input type="text" name="name" id="name" placeholder="e.g. Central Berlin" pattern="[a-zA-Z]*" maxlength="10" required/>
                     <label for="hashtag">Hashtag:</label>
-                    <input type="text" name="hashtag" id="hashtag" placeholder="e.g. #ber" pattern="^[#].*" maxlength="11"/>
+                    <input type="text" name="hashtag" id="hashtag" placeholder="e.g. #ber" pattern="^[#].[a-zA-Z]*" maxlength="11"/>
                     <input type="submit" value="Add Tag"/>
                 </fieldset>
                 
@@ -98,7 +97,6 @@
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="./javascripts/geotagging.js"></script>
-    
 </body>
 
 </html>
