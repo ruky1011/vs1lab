@@ -9,7 +9,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GeoTagApp</title>
     <link rel="stylesheet" href="./stylesheets/style.css" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
 <body>
@@ -36,7 +35,7 @@
                     <label for="longitude">Longitude:</label>
                     <input type="text" name="longitude" id="longitude" value = "8.400728171945046" readonly/>
                     <label for="name">Name:</label>
-                    <input type="text" name="name" id="name" placeholder="e.g. Central Berlin" maxlength="10" required pattern="[a-zA-Z]*"/>
+                    <input type="text" name="name" id="name" placeholder="e.g. Central Berlin" pattern="[a-zA-Z]*" maxlength="10" required/>
                     <label for="hashtag">Hashtag:</label>
                     <input type="text" name="hashtag" id="hashtag" placeholder="e.g. #ber" pattern="^[#].[a-zA-Z]*" maxlength="11"/>
                     <input type="submit" value="Add Tag"/>

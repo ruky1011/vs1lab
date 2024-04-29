@@ -58,8 +58,8 @@ input{
 ul li {
   width: 90%;
   height: 50px;
-  border: 1px solid #FFE1FF;
-  background-color: #FFE1FF;
+  border: 1px solid #00E1C3;
+  background-color: #00E1C3;
   border-radius: 5px;
   list-style-type: none;
   margin-bottom: 12px;
@@ -82,6 +82,10 @@ h2 {
 
 img {
   border-radius: 8px;
+}
+
+a {
+  color: black;
 }
 
 
@@ -152,7 +156,7 @@ img {
   line-height: 150px;
   padding-left: 50px;
   padding-right: 50px;
-  background-color: #FFE1FF;
+  background-color: #00E1C3;
 }
 
 .header__image{
@@ -227,7 +231,7 @@ img {
 .footer{
   /*display: flex;*/
   align-items: center;
-  background-color: #FFE1FF;
+  background-color: #00E1C3;
   padding-bottom: 0px;
   padding-left: 50px;
   line-height: 150px;
