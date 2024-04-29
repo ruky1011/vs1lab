@@ -240,6 +240,7 @@ img {
 @media (width < 863.2px ) {
   .main {
     flex-direction: column;
+    align-items: center;
   }
 
   .main__tagging {
