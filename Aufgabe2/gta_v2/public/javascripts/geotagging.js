@@ -124,8 +124,6 @@ function updateLocation() {
     let latitudeFieldDiscovery = document.getElementById('latitude_search');
     let longitudeFieldDiscovery = document.getElementById('longitude_search');
     let mapView = document.getElementById("mapView");
-    let map = document.createElement("div");
-    let discoveryMap = document.getElementById("discoveryMap");
 
     //MapManager initalisieren
     let mapManager = new MapManager();
@@ -149,10 +147,6 @@ function updateLocation() {
 
         // ###### Map aktualisieren ######
 
-        //Container fuer Map erzeugen
-        map.setAttribute("id", "map");
-        discoveryMap.appendChild(map);
-
         //Map mit aktueller Positon aktualisieren
         mapManager.initMap(latitude,longitude);
         mapManager.updateMarkers(latitude,longitude);
@@ -166,6 +160,5 @@ function updateLocation() {
 
 // Wait for the page to fully load its DOM content, then call updateLocation
 document.addEventListener("DOMContentLoaded", () => {
-    //alert("Please change the script 'geotagging.js'");
     updateLocation();
 });
