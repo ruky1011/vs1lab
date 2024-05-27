@@ -1,0 +1,267 @@
+/*
+  File origin: VS1LAB A1b  
+
+  CSS style is BEM. Classes used for CSS, IDs for JavaScript querying (future use).
+  CSS variables used for clarity and themability (e.g. through SSR). 
+  Inherited box sizing used for ease of including 3rd party content-box components.
+*/
+
+/* Global styling */
+
+html {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+
+  /* This approach prevents issues with 3rd party content-box components */
+  box-sizing: inherit;
+}
+
+
+/* Variables (example: see declaration for "a" below) */
+
+:root {
+  --link-color: #00B7FF;
+  --background-color: #efefef;
+  --border-color: #cdcdcd;
+  --gray-color: #666;
+}
+
+
+/* HTML element styles */
+
+body {
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+a {
+  color: var(--link-color);
+}
+
+/* ### TODO ### Styles for other HTML elements */
+
+input{
+  display: block;
+  
+  width: 80%;
+  height: 35px;
+
+  margin-bottom: 15px;
+}
+
+ul li {
+  width: 90%;
+  height: 50px;
+  border: 1px solid #00E1C3;
+  background-color: #00E1C3;
+  border-radius: 5px;
+  list-style-type: none;
+  margin-bottom: 12px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  color: #7A7A7A;
+}
+
+legend {
+  margin-bottom: 15px;
+  margin-left: 10px;
+}
+
+h2 {
+  margin-bottom: 20px;
+}
+
+img {
+  border-radius: 8px;
+}
+
+a {
+  color: black;
+}
+
+
+/* Grid styles (no changes required) */
+
+.row {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  flex: 1;
+}
+
+.col-1 {
+  width: calc(8.33% - 1rem);
+}
+
+.col-2 {
+  width: calc(16.66% - 1rem);
+}
+
+.col-3 {
+  width: calc(25% - 1rem);
+}
+
+.col-4 {
+  width: calc(33.33% - 1rem);
+}
+
+.col-5 {
+  width: calc(41.66% - 1rem);
+}
+
+.col-6 {
+  width: calc(50% - 1rem);
+}
+
+.col-7 {
+  width: calc(58.33% - 1rem);
+}
+
+.col-8 {
+  width: calc(66.66% - 1rem);
+}
+
+.col-9 {
+  width: calc(75% - 1rem);
+}
+
+.col-10 {
+  width: calc(83.33% - 1rem);
+}
+
+.col-11 {
+  width: calc(91.66% - 1rem);
+}
+
+.col-12 {
+  width: calc(100% - 1rem);
+}
+
+
+/* ### TODO ### Styles for Header Component */
+
+.header {
+  /*display: flex;*/
+  flex-direction: row;
+  align-items: center;
+  line-height: 150px;
+  padding-left: 50px;
+  padding-right: 50px;
+  background-color: #00E1C3;
+}
+
+.header__image{
+  width: 50px;
+}
+
+
+/* ### TODO ### Styles for Main Component */
+
+.main {
+  flex-direction: row;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  
+  padding-top: 2%;
+  padding-bottom: 2%;
+  padding-left: 2%;
+  padding-right: 2%;
+
+  margin: auto;
+}
+
+
+/* ### TODO ### Styles for Tagging component */
+
+.main__tagging {
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+
+
+.tagging_fields {
+  padding-left: 5%;
+}
+
+#latitude {
+  background-color: rgb(221, 220, 220);
+  color: #7A7A7A;
+}
+
+#longitude {
+  background-color: rgb(221, 220, 220);
+  color: #7A7A7A;
+}
+
+/* ### TODO ### Styles for Discovery component */
+
+.main__discovery {
+  flex-direction: column;
+}
+
+.discovery__search{
+  flex-direction: column;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.discovery__search_fields {
+  padding-left: 2%;
+}
+
+#search {
+  display: block;
+}
+
+.discovery__wrapper{
+  font-weight: bold;
+}
+
+/* ### TODO ### Styles for Footer Component */
+
+.footer{
+  /*display: flex;*/
+  align-items: center;
+  background-color: #00E1C3;
+  padding-bottom: 0px;
+  padding-left: 50px;
+  line-height: 150px;
+  font-weight: bold;
+}
+
+
+/* ### TODO ### Media Queries */
+
+@media (width < 863.2px ) {
+  .main {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .main__tagging {
+    width: calc(100% - 1rem);
+  }
+
+  .discovery__taglist{
+    width: calc(100% - 1rem);
+  }
+
+  .main__discovery{
+    width: calc(100% - 1rem);
+  }
+
+  .discovery__wrapper {
+    display: flex;
+    flex-direction: column;
+  }
+  
+}
