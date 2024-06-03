@@ -10,6 +10,10 @@
  * Define module dependencies.
  */
 
+//???? Imports load Examples
+module.GeoTagExamples;
+module.InMemoryGeoTagStore;
+
 const createError = require('http-errors');
 const express = require('express');
 const path = require('path');

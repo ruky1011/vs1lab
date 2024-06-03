@@ -23,10 +23,65 @@
  * - The proximity constrained is the same as for 'getNearbyGeoTags'.
  * - Keyword matching should include partial matches from name or hashtag fields. 
  */
+
+//module.import GeoTag from "./geotag.js";
+module.GeoTag;
+
 class InMemoryGeoTagStore{
 
-    // TODO: ... your code here ...
+    constructor(){
+
+    }
+
+    geoTagMemory = [];
+
+    addGeoTag = function (name, latitude, longitude, hashtag) {
+        var geotag = GeoTag(name, latitude, longitude, hashtag);
+        geoTagMemory.push(geotag);
+    }
+
+    removeGeoTag = function(name) {
+        const index = arr.indexOf(name);
+        if (index > -1) {
+            arr.splice(index, 1);
+        }
+
+    }
+
+    getNearbyGeoTags = function(latitude, longitude) {
+        var geotags = [];
+        var proximity = 20;
+      
+        //compares the distance of all tags to the current location and if the distance is smaller than the proximity radius the tag gets added to the new geotagProximity Array
+        for(i = 0; i < geoTagMemory.length; i++) {
+            var comparePoint = geoTagMemory[i];
+            var distance = Math.sqrt((comparePoint.latitude - latitude)^2 + (comparePoint.longitude - longitude)^2);
+            if (distance <= proximity) {
+                geotags.push(comparePoint);
+            }
+        }
+
+        return geotags;
+    }
+
+    searchNearbyGeoTags = function(latitude, longitude, keyword) {
+
+        //Gibt Tags im Radius zurueck
+        var geotagsRadius = getNearbyGeoTags(latitude, longitude);
+        var geotags = [];
+
+        //überprüft ob Tags im Radius das Keyword enthalten
+        for(i = 0; i < geotagsRadius.length; i++) {
+            var currentTag = geotagsRadius[i];
+            if (currentTag.name.includes(keyword) || currentTag.hashtag.includes(keyword)) {
+                geotags.push(currentTag);
+            }
+        }
+
+        return geotags;
+    }
 
 }
 
 module.exports = InMemoryGeoTagStore
+

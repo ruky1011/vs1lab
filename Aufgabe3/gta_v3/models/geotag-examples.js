@@ -30,6 +30,11 @@ class GeoTagExamples {
             ['Building K', 49.013190, 8.392090, '#campus'],
         ];
     }
+
 }
+
+for(i = 0; i < length; i++) {
+    addGeoTag(tagList[i][0], tagList[i][1], tagList[i][2], tagList[i][3]);
+ }
 
 module.exports = GeoTagExamples;
