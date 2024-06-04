@@ -37,7 +37,6 @@ class InMemoryGeoTagStore{
     addGeoTag = function (name, latitude, longitude, hashtag) {
         var geotag = new GeoTag(name, latitude, longitude, hashtag);
         this.geoTagMemory.push(geotag);
-        console.log("addGeoTag function", this.geoTagMemory);
     }
 
     removeGeoTag = function(name) {
@@ -56,10 +55,10 @@ class InMemoryGeoTagStore{
         for(i = 0; i < this.geoTagMemory.length; i++) {
             var comparePoint = this.geoTagMemory[i];
             var distance = Math.sqrt((comparePoint._latitude - latitude)^2 + (comparePoint._longitude - longitude)^2);
-            console.log("Distanz: ", distance);
+           /* console.log("Distanz: ", distance);
             console.log("comparePoint", comparePoint);
             console.log("comparePoint Latitude", comparePoint._latitude);
-            console.log("Vergleichs Latitude", latitude);
+            console.log("Vergleichs Latitude", latitude);*/
             if (distance <= proximity) {
                 geotags.push(comparePoint);
             }
@@ -69,15 +68,14 @@ class InMemoryGeoTagStore{
     }
 
     searchNearbyGeoTags = function(latitude, longitude, keyword) {
-
         //Gibt Tags im Radius zurueck
-        var geotagsRadius = getNearbyGeoTags(latitude, longitude);
+        var geotagsRadius = this.getNearbyGeoTags(latitude, longitude);
         var geotags = [];
 
         //überprüft ob Tags im Radius das Keyword enthalten
         for(i = 0; i < geotagsRadius.length; i++) {
             var currentTag = geotagsRadius[i];
-            if (currentTag.name.includes(keyword) || currentTag.hashtag.includes(keyword)) {
+            if (currentTag._name.includes(keyword) || currentTag._hashtag.includes(keyword)) {
                 geotags.push(currentTag);
             }
         }

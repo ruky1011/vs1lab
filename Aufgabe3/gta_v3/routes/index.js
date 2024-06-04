@@ -42,7 +42,7 @@ const GeoTagStore = require('../models/geotag-store');
 
 // TODO: extend the following route example if necessary
 router.get('/', (req, res) => {
-  res.render('index', { taglist: [], coordinates: {latitdude: 48.998764762538606, longitude: 8.400728171945046} })
+  res.render('index', { taglist: [], coordinates: {latitude: '', longitude: ''} })
 });
 
 /**
@@ -60,11 +60,6 @@ router.get('/', (req, res) => {
  * by radius around a given location.
  */
 
-router.get('/tagging', (req, res) => {
-  console.log("reqOutput: ", req.body);
-  res.render('index', { taglist: [] })
-});
-
 router.post('/tagging', function(req, res) {
   var name = req.body.name;
   var latitude = req.body.latitude;
@@ -77,7 +72,6 @@ router.post('/tagging', function(req, res) {
     latitude: req.body.latitude,
     longitude: req.body.longitude
   };
-  console.log("Coordinates: ", coordinates);
   res.render('./index.ejs', { taglist: proximityTagList, coordinates });
 });
 
@@ -97,6 +91,22 @@ router.post('/tagging', function(req, res) {
  * by radius and keyword.
  */
 
-// TODO: ... your code here ...
+router.post('/discovery', function(req, res) {
+  var latitude = req.body.latitude_search;
+  var longitude = req.body.longitude_search;
+  var search = req.body.search;
+
+  console.log("latitude discovery: ", latitude);
+
+  var searchTagList = geoTagStore.searchNearbyGeoTags(latitude, longitude, search);
+
+  var coordinates = {
+    latitude: latitude,
+    longitude: longitude
+  };
+
+  console.log("Coordinates: ", coordinates);
+  res.render('./index.ejs', { taglist: searchTagList, coordinates });
+});
 
 module.exports = router;

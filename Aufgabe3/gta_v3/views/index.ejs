@@ -63,8 +63,8 @@
                     <legend>Search</legend>
                     <label for="search">Search term or keywords:</label>
                     <input type="text" name="search" id="search" placeholder="e.g. Berlin"/>
-                    <input type="hidden" name="latitude_search" id="latitude_search" />
-                    <input type="hidden" name="longitude_search" id="longitude_search" />
+                    <input type="hidden" name="latitude_search" id="latitude_search" value="<%= coordinates.latitude %>" />
+                    <input type="hidden" name="longitude_search" id="longitude_search" value ="<%= coordinates.longitude %>"/>
                     <input type="submit" value="Search"/>
                 </fieldset>
 
@@ -75,7 +75,7 @@
                 <div class="discovery__taglist col-3">
                     <ul class="discovery__results" id="discoveryResults">
                         <% if (taglist !== undefined) taglist.forEach(function(gtag) { %>
-                            <li><%= gtag.name %> ( <%= gtag.latitude %>,<%= gtag.longitude %>) <%= gtag.hashtag %> </li>
+                            <li><%= gtag._name %> ( <%= gtag._latitude %>,<%= gtag._longitude %>) <%= gtag._hashtag %> </li>
                         <% }); %>
                     </ul>
                 </div>
@@ -97,6 +97,8 @@
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="./javascripts/geotagging.js"></script>
+    <script src="./javascripts/location-helper.js"></script>
+    <script src="./javascripts/map-manager.js"></script>
 </body>
 
 </html>
