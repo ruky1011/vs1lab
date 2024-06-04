@@ -25,19 +25,18 @@
  */
 
 //module.import GeoTag from "./geotag.js";
-module.GeoTag;
+const GeoTag = require("./geotag");
+
 
 class InMemoryGeoTagStore{
 
     constructor(){
-
+        this.geoTagMemory = [];
     }
 
-    geoTagMemory = [];
-
     addGeoTag = function (name, latitude, longitude, hashtag) {
-        var geotag = GeoTag(name, latitude, longitude, hashtag);
-        geoTagMemory.push(geotag);
+        var geotag = new GeoTag(name, latitude, longitude, hashtag);
+        this.geoTagMemory.push(geotag);
     }
 
     removeGeoTag = function(name) {

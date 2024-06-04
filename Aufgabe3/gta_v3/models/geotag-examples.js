@@ -33,8 +33,4 @@ class GeoTagExamples {
 
 }
 
-for(i = 0; i < length; i++) {
-    addGeoTag(tagList[i][0], tagList[i][1], tagList[i][2], tagList[i][3]);
- }
-
 module.exports = GeoTagExamples;

@@ -10,10 +10,6 @@
  * Define module dependencies.
  */
 
-//???? Imports load Examples
-module.GeoTagExamples;
-module.InMemoryGeoTagStore;
-
 const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
@@ -21,12 +17,16 @@ const logger = require('morgan');
 
 const indexRouter = require('./routes/index');
 
+const GeoTagExamples = require('./models/geotag-examples');
+const InMemoryGeoTagStore = require('./models/geotag-store');
+
 /**
  * Set up Express app.
  */
 
 const app = express();
 
+app.use(express.static('public'));
 // Set ejs as the view engine.
 app.set('views', path.join(__dirname, 'views'));
 
@@ -46,10 +46,23 @@ app.use(express.urlencoded({ extended: false }));
  * Test the result in a browser here: 'http://localhost:3000/'.
  */
 
-// TODO: ... your code here ...
+//load example data
+var examplesArray = GeoTagExamples.tagList;
+var geoTagStore = new InMemoryGeoTagStore;
+for(i = 0; i < examplesArray.length; i++) {
+  geoTagStore.addGeoTag(examplesArray[i][0], examplesArray[i][1], examplesArray[i][2], examplesArray[i][3]);
+}
 
 // Set dedicated script for routing
 app.use('/', indexRouter);
+app.post('/tagging', function(req, res) {
+  var coordinates = {
+    latitude: 12345,
+    longitude: 6789
+  };
+  console.log("Coordinates: ", coordinates);
+  res.render('./index.ejs', { taglist: [], coordinates });
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -66,4 +79,4 @@ app.use(function(err, req, res) {
     res.render('error');
   });
 
- module.exports = app;
+module.exports = app;

@@ -42,7 +42,7 @@ const GeoTagStore = require('../models/geotag-store');
 
 // TODO: extend the following route example if necessary
 router.get('/', (req, res) => {
-  res.render('index', { taglist: [] })
+  res.render('index', { taglist: [], coordinates: {latitdude: 48.998764762538606, longitude: 8.400728171945046} })
 });
 
 /**
@@ -60,7 +60,10 @@ router.get('/', (req, res) => {
  * by radius around a given location.
  */
 
-// TODO: ... your code here ...
+router.get('/tagging', (req, res) => {
+  console.log("reqOutput: ", req.body);
+  res.render('index', { taglist: [] })
+});
 
 /**
  * Route '/discovery' for HTTP 'POST' requests.

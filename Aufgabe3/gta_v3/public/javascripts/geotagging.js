@@ -162,3 +162,5 @@ function updateLocation() {
 document.addEventListener("DOMContentLoaded", () => {
     updateLocation();
 });
+
+module.exports = LocationHelper;
