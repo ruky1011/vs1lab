@@ -37,6 +37,7 @@ class InMemoryGeoTagStore{
     addGeoTag = function (name, latitude, longitude, hashtag) {
         var geotag = new GeoTag(name, latitude, longitude, hashtag);
         this.geoTagMemory.push(geotag);
+        console.log("addGeoTag function", this.geoTagMemory);
     }
 
     removeGeoTag = function(name) {
@@ -49,12 +50,16 @@ class InMemoryGeoTagStore{
 
     getNearbyGeoTags = function(latitude, longitude) {
         var geotags = [];
-        var proximity = 20;
+        var proximity = 2;
       
         //compares the distance of all tags to the current location and if the distance is smaller than the proximity radius the tag gets added to the new geotagProximity Array
-        for(i = 0; i < geoTagMemory.length; i++) {
-            var comparePoint = geoTagMemory[i];
-            var distance = Math.sqrt((comparePoint.latitude - latitude)^2 + (comparePoint.longitude - longitude)^2);
+        for(i = 0; i < this.geoTagMemory.length; i++) {
+            var comparePoint = this.geoTagMemory[i];
+            var distance = Math.sqrt((comparePoint._latitude - latitude)^2 + (comparePoint._longitude - longitude)^2);
+            console.log("Distanz: ", distance);
+            console.log("comparePoint", comparePoint);
+            console.log("comparePoint Latitude", comparePoint._latitude);
+            console.log("Vergleichs Latitude", latitude);
             if (distance <= proximity) {
                 geotags.push(comparePoint);
             }

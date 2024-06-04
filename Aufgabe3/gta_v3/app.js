@@ -48,21 +48,14 @@ app.use(express.urlencoded({ extended: false }));
 
 //load example data
 var examplesArray = GeoTagExamples.tagList;
-var geoTagStore = new InMemoryGeoTagStore;
+geoTagStore = new InMemoryGeoTagStore;
 for(i = 0; i < examplesArray.length; i++) {
   geoTagStore.addGeoTag(examplesArray[i][0], examplesArray[i][1], examplesArray[i][2], examplesArray[i][3]);
 }
 
 // Set dedicated script for routing
 app.use('/', indexRouter);
-app.post('/tagging', function(req, res) {
-  var coordinates = {
-    latitude: 12345,
-    longitude: 6789
-  };
-  console.log("Coordinates: ", coordinates);
-  res.render('./index.ejs', { taglist: [], coordinates });
-});
+app.use('/tagging', indexRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

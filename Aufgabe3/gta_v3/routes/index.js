@@ -65,6 +65,22 @@ router.get('/tagging', (req, res) => {
   res.render('index', { taglist: [] })
 });
 
+router.post('/tagging', function(req, res) {
+  var name = req.body.name;
+  var latitude = req.body.latitude;
+  var longitude = req.body.longitude;
+  var hashtag = req.body.hashtag;
+
+  geoTagStore.addGeoTag(name, latitude, longitude, hashtag);
+  var proximityTagList = geoTagStore.getNearbyGeoTags(latitude, longitude);
+  var coordinates = {
+    latitude: req.body.latitude,
+    longitude: req.body.longitude
+  };
+  console.log("Coordinates: ", coordinates);
+  res.render('./index.ejs', { taglist: proximityTagList, coordinates });
+});
+
 /**
  * Route '/discovery' for HTTP 'POST' requests.
  * (http://expressjs.com/de/4x/api.html#app.post.method)
