@@ -30,23 +30,8 @@ function updateLocation() {
     //MapManager initalisieren
     let mapManager = new MapManager();
 
-    //wird nur ausgeführt wenn die aktuelle Position bereits gefüllt ist -> um die Karte auch nach dem Hinzufügen oder der Suche zu aktualisieren
-    if (currentLatitude != '' && currentLongitude != '') {
-        let taglist_json = document.getElementById('map').dataset.tags;
-        let taglist = JSON.parse(taglist_json);
-
-        //Map mit der Ergebnisliste aus der Suche aktualisieren
-        mapManager.initMap(currentLatitude,currentLongitude);
-        mapManager.updateMarkers(currentLatitude,currentLongitude, taglist);
-
-        //Platzhalter der Map entfernen
-        mapView.nextElementSibling.remove();
-        mapView.remove();
-
-    }
-
     //überprüfen ob Position leer, nur dann muss die Position bestimmt werden
-    if(latitudeFieldTag.value == '' || longitudeFieldTag.value == '') {
+    if(currentLatitude == '' || currentLongitude == '') {
         // #### Callback Methode aufrufen (finden der aktuellen Position) #### 
         LocationHelper.findLocation((helper) => {
         
@@ -75,6 +60,18 @@ function updateLocation() {
             mapView.remove();
         
         }) ;
+    } else {
+
+        let taglist_json = document.getElementById('map').dataset.tags;
+        let taglist = JSON.parse(taglist_json);
+
+        //Map mit der Ergebnisliste aus der Suche aktualisieren
+        mapManager.initMap(currentLatitude,currentLongitude);
+        mapManager.updateMarkers(currentLatitude,currentLongitude, taglist);
+
+        //Platzhalter der Map entfernen
+        mapView.nextElementSibling.remove();
+        mapView.remove();
     }
 }
 
