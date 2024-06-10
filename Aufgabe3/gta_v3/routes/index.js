@@ -38,11 +38,14 @@ const GeoTagStore = require('../models/geotag-store');
  * Requests cary no parameters
  *
  * As response, the ejs-template is rendered without geotag objects.
+ * 
+ * coordinates where load into tagging and discovery form
+ * taglist_json is load into discovery map
  */
 
-// TODO: extend the following route example if necessary
+
 router.get('/', (req, res) => {
-  res.render('index', { taglist: [], coordinates: {latitude: '', longitude: ''} })
+  res.render('index', { taglist: [], coordinates: {latitude: '', longitude: ''}, taglist_json: [] })
 });
 
 /**
@@ -58,6 +61,9 @@ router.get('/', (req, res) => {
  * All result objects are located in the proximity of the new geotag.
  * To this end, "GeoTagStore" provides a method to search geotags 
  * by radius around a given location.
+ * 
+ * coordinates where load into tagging and discovery form
+ * taglist_json is load into discovery map
  */
 
 router.post('/tagging', function(req, res) {
@@ -68,11 +74,15 @@ router.post('/tagging', function(req, res) {
 
   geoTagStore.addGeoTag(name, latitude, longitude, hashtag);
   var proximityTagList = geoTagStore.getNearbyGeoTags(latitude, longitude);
+  var taglist_json = JSON.stringify(proximityTagList);
+
+  console.log("tagList json tagging: ", taglist_json);
+
   var coordinates = {
     latitude: req.body.latitude,
     longitude: req.body.longitude
   };
-  res.render('./index.ejs', { taglist: proximityTagList, coordinates });
+  res.render('./index.ejs', { taglist: proximityTagList, coordinates, taglist_json });
 });
 
 /**
@@ -89,16 +99,25 @@ router.post('/tagging', function(req, res) {
  * the term as a part of their names or hashtags. 
  * To this end, "GeoTagStore" provides methods to search geotags 
  * by radius and keyword.
+ * 
+ * coordinates where load into tagging and discovery form
+ * taglist_json is load into discovery map
+ * 
  */
 
 router.post('/discovery', function(req, res) {
+
+  // Values for search
   var latitude = req.body.latitude_search;
   var longitude = req.body.longitude_search;
   var search = req.body.search;
 
-  console.log("latitude discovery: ", latitude);
-
+  // Search the geotags in the proximity which includes the searched keyword
   var searchTagList = geoTagStore.searchNearbyGeoTags(latitude, longitude, search);
+
+  // Convert the outputArray into Json
+  var taglist_json = JSON.stringify(searchTagList);
+
 
   var coordinates = {
     latitude: latitude,
@@ -106,7 +125,7 @@ router.post('/discovery', function(req, res) {
   };
 
   console.log("Coordinates: ", coordinates);
-  res.render('./index.ejs', { taglist: searchTagList, coordinates });
+  res.render('./index.ejs', { taglist: searchTagList, coordinates, taglist_json });
 });
 
 module.exports = router;

@@ -23,11 +23,27 @@ function updateLocation() {
     let longitudeFieldDiscovery = document.getElementById('longitude_search');
     let mapView = document.getElementById("mapView");
 
-    console.log("latitudeFieldTag: ", latitudeFieldTag.value);
-    console.log("longitudeFieldTag: ", longitudeFieldTag.value);
+    //aktuelle Position aus dem Formular entnehmen und speichern
+    var currentLatitude = latitudeFieldTag.value;
+    var currentLongitude = longitudeFieldTag.value;
 
     //MapManager initalisieren
     let mapManager = new MapManager();
+
+    //wird nur ausgeführt wenn die aktuelle Position bereits gefüllt ist -> um die Karte auch nach dem Hinzufügen oder der Suche zu aktualisieren
+    if (currentLatitude != '' && currentLongitude != '') {
+        let taglist_json = document.getElementById('map').dataset.tags;
+        let taglist = JSON.parse(taglist_json);
+
+        //Map mit der Ergebnisliste aus der Suche aktualisieren
+        mapManager.initMap(currentLatitude,currentLongitude);
+        mapManager.updateMarkers(currentLatitude,currentLongitude, taglist);
+
+        //Platzhalter der Map entfernen
+        mapView.nextElementSibling.remove();
+        mapView.remove();
+
+    }
 
     //überprüfen ob Position leer, nur dann muss die Position bestimmt werden
     if(latitudeFieldTag.value == '' || longitudeFieldTag.value == '') {

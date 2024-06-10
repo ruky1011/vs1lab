@@ -55,10 +55,6 @@ class InMemoryGeoTagStore{
         for(i = 0; i < this.geoTagMemory.length; i++) {
             var comparePoint = this.geoTagMemory[i];
             var distance = Math.sqrt((comparePoint._latitude - latitude)^2 + (comparePoint._longitude - longitude)^2);
-           /* console.log("Distanz: ", distance);
-            console.log("comparePoint", comparePoint);
-            console.log("comparePoint Latitude", comparePoint._latitude);
-            console.log("Vergleichs Latitude", latitude);*/
             if (distance <= proximity) {
                 geotags.push(comparePoint);
             }
@@ -72,10 +68,18 @@ class InMemoryGeoTagStore{
         var geotagsRadius = this.getNearbyGeoTags(latitude, longitude);
         var geotags = [];
 
-        //überprüft ob Tags im Radius das Keyword enthalten
+        //konvertiert das eingegeben keyword zu Kleinbuchstaben um die Suche case-insensitive zu machen
+        var lowercaseKeyword = keyword.toLowerCase();
+
+        //nimmt die bereits nach dem Radius gefilterten Tags und überprüft ob der Name oder das Hashtag das Keyword enthalten
         for(i = 0; i < geotagsRadius.length; i++) {
             var currentTag = geotagsRadius[i];
-            if (currentTag._name.includes(keyword) || currentTag._hashtag.includes(keyword)) {
+
+            //konvertiert die zu suchenden Werte (name und hashtag) zu Kleinbuchstaben um die Suche case-insensitive zu machen
+            var lowercaseName = currentTag._name.toLowerCase();
+            var lowercaseHashtag = currentTag._hashtag.toLowerCase();
+
+            if (lowercaseName.includes(lowercaseKeyword) || lowercaseHashtag.includes(lowercaseKeyword)) {
                 geotags.push(currentTag);
             }
         }
