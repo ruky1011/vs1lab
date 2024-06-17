@@ -39,7 +39,7 @@ const GeoTagStore = require('../models/geotag-store');
  */
 
 router.get('/', (req, res) => {
-  res.render('index', { taglist: [] })
+  res.render('index', { taglist: [], coordinates: {latitude: '', longitude: ''}, taglist_json: [] })
 });
 
 // API routes (A4)
