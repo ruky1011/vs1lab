@@ -38,7 +38,7 @@ app.use(logger('dev'));
 
 // Set content processing
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 
 /**
  * VS1LAB:
@@ -55,8 +55,7 @@ for(i = 0; i < examplesArray.length; i++) {
 
 // Set dedicated script for routing
 app.use('/', indexRouter);
-app.use('/tagging', indexRouter);
-app.use('/discovery', indexRouter);
+app.use('/api/geotags', indexRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

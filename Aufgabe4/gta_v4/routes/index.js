@@ -56,7 +56,30 @@ router.get('/', (req, res) => {
  * If 'latitude' and 'longitude' are available, it will be further filtered based on radius.
  */
 
-// TODO: ... your code here ...
+router.get('/api/geotags', function(req, res) {
+
+  console.log("Request Getoags REQ: ", req);
+  console.log("Response Getoags GET: ", res);
+  // Values for search
+  var latitude = req.query.latitude_search;
+  var longitude = req.query.longitude_search;
+  var search = req.query.search;
+
+  // Search the geotags in the proximity which includes the searched keyword
+  var searchTagList = geoTagStore.searchNearbyGeoTags(latitude, longitude, search);
+
+  // Convert the outputArray into Json
+  var taglist_json = JSON.stringify(searchTagList);
+
+
+  var coordinates = {
+    latitude: latitude,
+    longitude: longitude
+  };
+
+  console.log("Coordinates: ", coordinates);
+  res.render('./index.ejs', { taglist: searchTagList, coordinates, taglist_json });
+});
 
 
 /**
@@ -70,7 +93,24 @@ router.get('/', (req, res) => {
  * The new resource is rendered as JSON in the response.
  */
 
-// TODO: ... your code here ...
+router.post('/api/geotags', function(req, res) {
+  var name = req.body.name;
+  var latitude = req.body.latitude;
+  var longitude = req.body.longitude;
+  var hashtag = req.body.hashtag;
+
+  geoTagStore.addGeoTag(name, latitude, longitude, hashtag);
+  var proximityTagList = geoTagStore.getNearbyGeoTags(latitude, longitude);
+  var taglist_json = JSON.stringify(proximityTagList);
+
+  console.log("tagList json tagging: ", taglist_json);
+
+  var coordinates = {
+    latitude: req.body.latitude,
+    longitude: req.body.longitude
+  };
+  res.render('./index.ejs', { taglist: proximityTagList, coordinates, taglist_json });
+});
 
 
 /**
