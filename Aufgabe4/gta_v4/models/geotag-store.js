@@ -35,7 +35,18 @@ class InMemoryGeoTagStore{
     }
 
     addGeoTag = function (name, latitude, longitude, hashtag) {
-        var geotag = new GeoTag(name, latitude, longitude, hashtag);
+        var newID;
+        var lastID;
+        var lastElement = this.geoTagMemory[this.geoTagMemory.length - 1];
+
+        if ( lastElement == undefined ) {
+            newID = 1;
+        } else {
+            lastID = lastElement._id;
+            newID = lastID + 1;
+        }
+        
+        var geotag = new GeoTag(newID, name, latitude, longitude, hashtag);
         this.geoTagMemory.push(geotag);
     }
 
@@ -86,6 +97,67 @@ class InMemoryGeoTagStore{
 
         return geotags;
     }
+
+    searchGeoTagByID = function(id) {
+        for(i = 0; i < this.geoTagMemory.length; i++) {
+            var geotag;
+            var currentGeoTag = this.geoTagMemory[i];
+            if (currentGeoTag._id == id) {
+                geotag = currentGeoTag;
+                break;
+            }
+        }
+
+        return geotag;
+    }
+
+    changeGeoTagByID = function(id, name, latitude, longitude, hashtag, geoTagStore) {
+        var geotag = geoTagStore.searchGeoTagID(id);
+        if (name != undefined) {
+            geotag._name = name;
+        }
+
+        if (latitude != undefined) {
+            geotag._latitude = latitude;
+        }
+
+        if (longitude != undefined) {
+            geotag._longitude = longitude;
+        }
+
+        if (hashtag != undefined) {
+            geotag._hashtag = hashtag;
+        }
+    }
+
+    deleteGeoTagByID = function(id) {
+        for(i = 0; i < this.geoTagMemory.length; i++) {
+            //laut GitHub kein Austausch von Ressourcen, laut index.js soll gelöschtes Element zurückgegeben werden -> return ja oder nein?
+            var deletedGeotag; 
+            var currentGeoTag = this.geoTagMemory[i];
+            if (currentGeoTag._id == id) {
+                this.geoTagMemory.splice(i, 1);
+                deletedGeotag = currentGeoTag;
+                break;
+            }
+
+            return deletedGeotag;
+        }
+    }
+
+    getAllGeoTags = function() {
+        var geotags = [];
+      
+        //compares the distance of all tags to the current location and if the distance is smaller than the proximity radius the tag gets added to the new geotagProximity Array
+        for(i = 0; i < this.geoTagMemory.length; i++) {
+            var currentGeoTag = this.geoTagMemory[i];
+            geotags.push(currentGeoTag);
+        }
+
+        return geotags;
+    }
+
+
 
 }
 

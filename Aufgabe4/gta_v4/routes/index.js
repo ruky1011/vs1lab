@@ -58,8 +58,6 @@ router.get('/', (req, res) => {
 
 router.get('/api/geotags', function(req, res) {
 
-  console.log("Request Getoags REQ: ", req);
-  console.log("Response Getoags GET: ", res);
   // Values for search
   var latitude = req.query.latitude_search;
   var longitude = req.query.longitude_search;
@@ -67,9 +65,10 @@ router.get('/api/geotags', function(req, res) {
 
   // Search the geotags in the proximity which includes the searched keyword
   var searchTagList = geoTagStore.searchNearbyGeoTags(latitude, longitude, search);
+  console.log("searchTagList: ", searchTagList);
 
   // Convert the outputArray into Json
-  var taglist_json = JSON.stringify(searchTagList);
+ var taglist_json = JSON.stringify(searchTagList);
 
 
   var coordinates = {
@@ -78,7 +77,7 @@ router.get('/api/geotags', function(req, res) {
   };
 
   console.log("Coordinates: ", coordinates);
-  res.render('./index.ejs', { taglist: searchTagList, coordinates, taglist_json });
+  res.json(taglist_json);
 });
 
 
@@ -94,6 +93,7 @@ router.get('/api/geotags', function(req, res) {
  */
 
 router.post('/api/geotags', function(req, res) {
+
   var name = req.body.name;
   var latitude = req.body.latitude;
   var longitude = req.body.longitude;
@@ -109,7 +109,7 @@ router.post('/api/geotags', function(req, res) {
     latitude: req.body.latitude,
     longitude: req.body.longitude
   };
-  res.render('./index.ejs', { taglist: proximityTagList, coordinates, taglist_json });
+  res.json(taglist_json);
 });
 
 
@@ -123,8 +123,14 @@ router.post('/api/geotags', function(req, res) {
  * The requested tag is rendered as JSON in the response.
  */
 
-// TODO: ... your code here ...
+router.get('/api/geotags/:id', function(req, res) {
 
+  var id = req.params.id;
+
+  var geotag = geoTagStore.searchGeoTagByID(id);
+
+  res.json(geotag);
+});
 
 /**
  * Route '/api/geotags/:id' for HTTP 'PUT' requests.
@@ -140,7 +146,18 @@ router.post('/api/geotags', function(req, res) {
  * The updated resource is rendered as JSON in the response. 
  */
 
-// TODO: ... your code here ...
+router.put('/api/geotags/:id', function(req, res) {
+
+  var id = req.params.id;
+  var name = req.body.name;
+  var latitude = req.body.latitude;
+  var longitude = req.body.longitude;
+  var hashtag = req.body.hashtag;
+
+  var geotag = geoTagStore.changeGeoTagByID(id, name, latitude, longitude, hashtag, geoTagStore);
+
+  res.json(geotag);
+});
 
 
 /**
@@ -154,6 +171,15 @@ router.post('/api/geotags', function(req, res) {
  * The deleted resource is rendered as JSON in the response.
  */
 
-// TODO: ... your code here ...
+router.delete('/api/geotags/:id', function(req, res) {
+
+  var id = req.params.id;
+
+  var geotag = geoTagStore.deleteGeoTagByID(id);
+
+  //console.log("DELETE GEOTAG: ", geoTagStore.getAllGeoTags());
+
+  res.json(geotag);
+});
 
 module.exports = router;
