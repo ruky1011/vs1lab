@@ -58,25 +58,22 @@ router.get('/', (req, res) => {
 
 router.get('/api/geotags', function(req, res) {
 
+  console.log('query request: ', req.query);
+
   // Values for search
   var latitude = req.query.latitude_search;
   var longitude = req.query.longitude_search;
   var search = req.query.search;
+  var start = req.query.startValue;
 
   // Search the geotags in the proximity which includes the searched keyword
-  var searchTagList = geoTagStore.searchNearbyGeoTags(latitude, longitude, search);
+  var searchTagList = geoTagStore.searchNearbyGeoTags(latitude, longitude, search, start);
   console.log("searchTagList: ", searchTagList);
 
   // Convert the outputArray into Json
  var taglist_json = JSON.stringify(searchTagList);
 
-
-  var coordinates = {
-    latitude: latitude,
-    longitude: longitude
-  };
-
-  console.log("Coordinates: ", coordinates);
+  console.log('Ergebnis /api/geotags get: ', taglist_json);
   res.json(taglist_json);
 });
 

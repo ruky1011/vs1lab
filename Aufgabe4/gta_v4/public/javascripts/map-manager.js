@@ -59,6 +59,7 @@
     * @param {{latitude, longitude, name}[]} tags The map tags, defaults to just the current location
     */
     updateMarkers(latitude, longitude, tags = []) {
+        console.log("Update Tags: ", tags);
         // delete all markers
         this.#markers.clearLayers();
         L.marker([latitude, longitude], { icon: this.#yourLocationIcon }) 

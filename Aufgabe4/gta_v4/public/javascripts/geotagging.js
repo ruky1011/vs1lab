@@ -74,18 +74,119 @@ function updateLocation(response) {
     } else {
         console.log("response: ", response);
         if(response != undefined) {
-        console.log("response: ", response);
-        var data = JSON.parse(response);
-        console.log("data: ", data);
+            var data = JSON.parse(response); //JSON Datei in Array parsen
+
+
+            //letzer Wert von data auslesen (Anzahl der gesamten Ergebnisse) und aus array löschen
+            let numberOfResults = data.pop().Anzahl;
+            console.log("numberResults: ", numberOfResults);
+            console.log("data after pop: ", data);
+
+            // #### Alte Ergebnisliste löschen ####
+
+            const discoveryResults = document.getElementById('discoveryResults');
+            while (discoveryResults.firstChild) {
+                discoveryResults.firstChild.remove()
+            }
+
+            
+            // #### Ergebnisliste anzeigen ####
             for(i = 0; i < data.length; i++) {
             li = document.createElement('li');
             dataInnerHTML = data[i]._name + " (" + data[i]._latitude + ", " + data[i]._longitude + ") " + data[i]._hashtag;
             li.innerHTML = dataInnerHTML;
-            document.getElementById('discoveryResults').appendChild(li);
+            discoveryResults.appendChild(li);
             }
+
+            // #### Alte Pagination löschen ####
+
+            const pagination = document.getElementById('pagination');
+            while (pagination.firstChild) {
+                pagination.firstChild.remove()
+            }
+
+            // #### Pagination anzeigen ####
+
+            // Anzahl Seiten berechnen
+            let numberOfPages = Math.ceil(numberOfResults / 7);
+            console.log("numberOfPages: ", numberOfPages);
+
+            // linker Pfeil Pagination
+            a = document.createElement('a');
+            a.setAttribute('href', "#");
+            a.setAttribute('id', 'leftArrow');
+            a.innerHTML = '&laquo;';
+            document.getElementById('pagination').appendChild(a);
+
+            // einzelne Seiten in Pagination einfügen
+            for (i = 1; i <= numberOfPages; i++) {
+                let id = 'page' + i;
+                let onclickMethod = 'paginationButtonClicked('+id+')';
+                a = document.createElement('a');
+                a.setAttribute('onclick', onclickMethod);
+                a.setAttribute('id', id);
+                a.innerHTML = i;
+                document.getElementById('pagination').appendChild(a);
+            }
+
+
+            //document.getElementById('page1').setAttribute('class', 'active');
+
+            //rechter Pfeil Pagination
+            a = document.createElement('a');
+            a.setAttribute('href', '#');
+            a.setAttribute('id', 'rightArrow');
+            a.innerHTML = '&raquo;';
+            document.getElementById('pagination').appendChild(a);
+
+            // #### MAP aktualisieren ####
             mapManager.updateMarkers(currentLatitude, currentLongitude, data);
         }
     }
+}
+
+async function paginationButtonClicked (page) {
+    var latitudeDiscoveryForm = document.getElementById('latitude_search').value;
+    var longitudeDiscoveryForm = document.getElementById('longitude_search').value;
+    var searchDiscoveryForm = document.getElementById('search').value;
+    var clickedPage = page.id.substring(4);
+    var startElement = (7 * (clickedPage-1)) + 1;
+    console.log("start Element: ", startElement);
+
+    var actualActivePage = document.getElementsByClassName('active');
+    if (actualActivePage[0] != undefined) {
+        actualActivePage[0].removeAttribute('class');
+    }
+
+    //Werte für die Suche aus Formular holen
+    var latitudeDiscoveryForm = document.getElementById('latitude_search').value;
+    var longitudeDiscoveryForm = document.getElementById('longitude_search').value;
+    var searchDiscoveryForm = document.getElementById('search').value;
+
+    //Paramater für die Abfrage speichern
+    const params = new URLSearchParams({
+        'latitude_search': latitudeDiscoveryForm,
+        'longitude_search': longitudeDiscoveryForm,
+        'search': searchDiscoveryForm,
+        'startValue': startElement
+    });
+
+    //URL für die Abfrage mit gespeicherten Parametern erstellen
+    const queryUrl = `http://localhost:3000/api/geotags?${params}`
+
+    const response = await fetch(queryUrl, {
+        method: 'GET'
+    })
+    .then(response => response.json())
+    .then(data => updateLocation(data)); //Updatet die Ergebnisliste und die Karte mit den gefundenen Werten
+
+    console.log('response: ', response);
+
+    document.getElementById(page.id).setAttribute('class', 'active');
+
+    //geoTagStore.searchNearbyGeoTags(latitudeDiscoveryForm, longitudeDiscoveryForm, searchDiscoveryForm, clickedPage);
+
+    alert("Button clicked" + clickedPage);
 }
 
 
@@ -110,7 +211,7 @@ class GeoTag {
     }
 
     toJson() {
-        let arr = {"name": this._name, "latitude": this._latitude, "longitude": this._longitude, "hashtag": this._hashtag};
+        let arr = {"_name": this._name, "_latitude": this._latitude, "_longitude": this._longitude, "_hashtag": this._hashtag};
         return JSON.stringify(arr);
     }
 }
@@ -157,7 +258,8 @@ async function buttonClickedDiscovery(event) {
     const params = new URLSearchParams({
         'latitude_search': latitudeDiscoveryForm,
         'longitude_search': longitudeDiscoveryForm,
-        'search': searchDiscoveryForm
+        'search': searchDiscoveryForm,
+        'startValue': 1
     });
 
     //URL für die Abfrage mit gespeicherten Parametern erstellen

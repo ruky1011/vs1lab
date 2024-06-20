@@ -74,9 +74,10 @@ class InMemoryGeoTagStore{
         return geotags;
     }
 
-    searchNearbyGeoTags = function(latitude, longitude, keyword) {
+    searchNearbyGeoTags = function(latitude, longitude, keyword, start) {
         //Gibt Tags im Radius zurueck
         var geotagsRadius = this.getNearbyGeoTags(latitude, longitude);
+        var geotagsAll = [];
         var geotags = [];
 
         //konvertiert das eingegeben keyword zu Kleinbuchstaben um die Suche case-insensitive zu machen
@@ -91,9 +92,25 @@ class InMemoryGeoTagStore{
             var lowercaseHashtag = currentTag._hashtag.toLowerCase();
 
             if (lowercaseName.includes(lowercaseKeyword) || lowercaseHashtag.includes(lowercaseKeyword)) {
-                geotags.push(currentTag);
+                geotagsAll.push(currentTag);
             }
         }
+
+        var countAll = geotagsAll.length;
+        var end = start + 7; 
+
+        console.log("start: ", start);
+        console.log("end: ", end);
+
+        for(i = start; i < end; i++) {
+            if (geotagsAll[i] != undefined) {
+            geotags.push(geotagsAll[i]);
+            console.log("geotagsAll: ", geotagsAll[i] + "geotags: ", geotags);
+            }
+        }
+
+        countAll = {"name": undefined, "latitude": undefined, "longitude": undefined,"Anzahl": countAll};
+        geotags.push(countAll);
 
         return geotags;
     }
