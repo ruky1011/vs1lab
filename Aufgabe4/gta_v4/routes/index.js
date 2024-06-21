@@ -58,6 +58,8 @@ router.get('/', (req, res) => {
 
 router.get('/api/geotags', function(req, res) {
 
+  console.log("GET aufgerufen!")
+
   console.log('query request: ', req.query);
 
   // Values for search
@@ -71,9 +73,8 @@ router.get('/api/geotags', function(req, res) {
   console.log("searchTagList: ", searchTagList);
 
   // Convert the outputArray into Json
- var taglist_json = JSON.stringify(searchTagList);
-
-  console.log('Ergebnis /api/geotags get: ', taglist_json);
+  var taglist_json = JSON.stringify(searchTagList);
+  console.log("taglist_json GET: ", taglist_json);
   res.json(taglist_json);
 });
 
@@ -91,21 +92,16 @@ router.get('/api/geotags', function(req, res) {
 
 router.post('/api/geotags', function(req, res) {
 
-  var name = req.body.name;
-  var latitude = req.body.latitude;
-  var longitude = req.body.longitude;
-  var hashtag = req.body.hashtag;
+  var name = req.body._name;
+  var latitude = req.body._latitude;
+  var longitude = req.body._longitude;
+  var hashtag = req.body._hashtag;
+  var start = req.body._start;
 
   geoTagStore.addGeoTag(name, latitude, longitude, hashtag);
-  var proximityTagList = geoTagStore.getNearbyGeoTags(latitude, longitude);
+  var proximityTagList = geoTagStore.searchNearbyGeoTags(latitude, longitude, '', start);
   var taglist_json = JSON.stringify(proximityTagList);
 
-  console.log("tagList json tagging: ", taglist_json);
-
-  var coordinates = {
-    latitude: req.body.latitude,
-    longitude: req.body.longitude
-  };
   res.json(taglist_json);
 });
 

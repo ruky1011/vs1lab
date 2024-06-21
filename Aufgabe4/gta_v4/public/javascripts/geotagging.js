@@ -72,7 +72,6 @@ function updateLocation(response) {
 
     //wenn aktuelle Position bereits vorhanden
     } else {
-        console.log("response: ", response);
         if(response != undefined) {
             var data = JSON.parse(response); //JSON Datei in Array parsen
 
@@ -106,6 +105,7 @@ function updateLocation(response) {
             }
 
             // #### Pagination anzeigen ####
+            paginationElement = document.getElementById('pagination');
 
             // Anzahl Seiten berechnen
             let numberOfPages = Math.ceil(numberOfResults / 7);
@@ -113,80 +113,39 @@ function updateLocation(response) {
 
             // linker Pfeil Pagination
             a = document.createElement('a');
-            a.setAttribute('href', "#");
             a.setAttribute('id', 'leftArrow');
+            a.setAttribute('onclick', 'paginationButtonClicked(leftArrow,'+numberOfPages+')');
             a.innerHTML = '&laquo;';
-            document.getElementById('pagination').appendChild(a);
+            paginationElement.appendChild(a);
 
             // einzelne Seiten in Pagination einfügen
             for (i = 1; i <= numberOfPages; i++) {
                 let id = 'page' + i;
-                let onclickMethod = 'paginationButtonClicked('+id+')';
+                let onclickMethod = 'paginationButtonClicked('+id+','+numberOfPages+')';
                 a = document.createElement('a');
                 a.setAttribute('onclick', onclickMethod);
                 a.setAttribute('id', id);
                 a.innerHTML = i;
-                document.getElementById('pagination').appendChild(a);
+                paginationElement.appendChild(a);
             }
 
-
-            //document.getElementById('page1').setAttribute('class', 'active');
-
-            //rechter Pfeil Pagination
+            // rechter Pfeil Pagination
             a = document.createElement('a');
-            a.setAttribute('href', '#');
             a.setAttribute('id', 'rightArrow');
+            a.setAttribute('onclick', 'paginationButtonClicked(rightArrow,'+numberOfPages+')');
             a.innerHTML = '&raquo;';
-            document.getElementById('pagination').appendChild(a);
+            paginationElement.appendChild(a);
+
+            // Anzahl Resultate anzeigen
+            p = document.createElement('p');
+            p.innerHTML = '('+numberOfResults+')';
+            paginationElement.appendChild(p);
+
 
             // #### MAP aktualisieren ####
             mapManager.updateMarkers(currentLatitude, currentLongitude, data);
         }
     }
-}
-
-async function paginationButtonClicked (page) {
-    var latitudeDiscoveryForm = document.getElementById('latitude_search').value;
-    var longitudeDiscoveryForm = document.getElementById('longitude_search').value;
-    var searchDiscoveryForm = document.getElementById('search').value;
-    var clickedPage = page.id.substring(4);
-    var startElement = (7 * (clickedPage-1)) + 1;
-    console.log("start Element: ", startElement);
-
-    var actualActivePage = document.getElementsByClassName('active');
-    if (actualActivePage[0] != undefined) {
-        actualActivePage[0].removeAttribute('class');
-    }
-
-    //Werte für die Suche aus Formular holen
-    var latitudeDiscoveryForm = document.getElementById('latitude_search').value;
-    var longitudeDiscoveryForm = document.getElementById('longitude_search').value;
-    var searchDiscoveryForm = document.getElementById('search').value;
-
-    //Paramater für die Abfrage speichern
-    const params = new URLSearchParams({
-        'latitude_search': latitudeDiscoveryForm,
-        'longitude_search': longitudeDiscoveryForm,
-        'search': searchDiscoveryForm,
-        'startValue': startElement
-    });
-
-    //URL für die Abfrage mit gespeicherten Parametern erstellen
-    const queryUrl = `http://localhost:3000/api/geotags?${params}`
-
-    const response = await fetch(queryUrl, {
-        method: 'GET'
-    })
-    .then(response => response.json())
-    .then(data => updateLocation(data)); //Updatet die Ergebnisliste und die Karte mit den gefundenen Werten
-
-    console.log('response: ', response);
-
-    document.getElementById(page.id).setAttribute('class', 'active');
-
-    //geoTagStore.searchNearbyGeoTags(latitudeDiscoveryForm, longitudeDiscoveryForm, searchDiscoveryForm, clickedPage);
-
-    alert("Button clicked" + clickedPage);
 }
 
 
@@ -211,7 +170,7 @@ class GeoTag {
     }
 
     toJson() {
-        let arr = {"_name": this._name, "_latitude": this._latitude, "_longitude": this._longitude, "_hashtag": this._hashtag};
+        let arr = {"_name": this._name, "_latitude": this._latitude, "_longitude": this._longitude, "_hashtag": this._hashtag, "_start": 1};
         return JSON.stringify(arr);
     }
 }
@@ -227,6 +186,8 @@ async function buttonClickedTagging(event) {
     // Neues GeoTag Element erstellen
     var tagFormData = new GeoTag(nameTagForm, latitudeTagForm, longitudeTagForm, hashtagTagForm);
 
+    console.log("tagFormData: ", tagFormData.toJson());
+
     // Validierung der Felder korrekt?
     // Ja? -> Absenden des Formulars verhindern und fetch auslösen
     // Nein? -> Validierungsmeldung anzeigen
@@ -241,10 +202,13 @@ async function buttonClickedTagging(event) {
             body: tagFormData.toJson()
         })
         .then(response => response.json())
-        .then(data => updateLocation(data)); //Updatet die Ergebnisliste und die Karte mit den gefundenen Werten
+        .then(data => updateLocation(data)) //Updatet die Ergebnisliste und die Karte mit den gefundenen Werten
+        .then(clearTagging());               //leert die Tagging-Felder
     } else {
         event.target.reportValidity(); 
     }
+
+    document.getElementById('page1').setAttribute('class', 'active');
 }
 
 // #### Funktion wenn der "Search"- Button angeklickt wurde
@@ -278,4 +242,64 @@ async function buttonClickedDiscovery(event) {
     } else {
         event.target.reportValidity(); 
     }
+
+    document.getElementById('page1').setAttribute('class', 'active');
+}
+
+// #### Pagination Button wurde angeklickt ####
+async function paginationButtonClicked (page, numberOfResults) {
+
+    var latitudeDiscoveryForm = document.getElementById('latitude_search').value;
+    var longitudeDiscoveryForm = document.getElementById('longitude_search').value;
+    var searchDiscoveryForm = document.getElementById('search').value;
+    var actualActivePage = document.getElementsByClassName('active');
+    var clickedPage;
+
+    if (page.id == 'leftArrow') {
+        clickedPage = Number(actualActivePage[0].id.substring(4)) - 1;
+    } else if (page.id == 'rightArrow') {
+        clickedPage = Number(actualActivePage[0].id.substring(4)) + 1;
+    } else {
+        clickedPage = page.id.substring(4);
+    }
+
+    console.log("clickedPage: ", clickedPage);
+    if (clickedPage >= 1 && clickedPage <=  numberOfResults) {
+
+        var startElement = (7 * (clickedPage-1)) + 1;
+        console.log("start Element: ", startElement);
+
+        console.log("actualActivePage: ", actualActivePage[0]);
+        if (actualActivePage[0] != undefined) {
+            actualActivePage[0].removeAttribute('class');
+        }
+
+        //Paramater für die Abfrage speichern
+        const params = new URLSearchParams({
+            'latitude_search': latitudeDiscoveryForm,
+            'longitude_search': longitudeDiscoveryForm,
+            'search': searchDiscoveryForm,
+            'startValue': startElement
+        });
+
+        console.log("params: ", params);
+
+        //URL für die Abfrage mit gespeicherten Parametern erstellen
+        const queryUrl = `http://localhost:3000/api/geotags?${params}`
+
+        console.log("queryURL: ", queryUrl);
+
+        await fetch(queryUrl, {
+            method: 'GET'
+        })
+        .then(response => response.json())
+        .then(data => updateLocation(data)); //Updatet die Ergebnisliste und die Karte mit den gefundenen Werten
+
+        document.getElementById('page'+clickedPage).setAttribute('class', 'active');
+    }
+}
+
+function clearTagging() {
+    document.getElementById('name').value = '';
+    document.getElementById('hashtag').value = '';
 }

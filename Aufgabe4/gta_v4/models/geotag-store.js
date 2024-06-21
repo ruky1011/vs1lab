@@ -34,6 +34,8 @@ class InMemoryGeoTagStore{
         this.geoTagMemory = [];
     }
 
+// ######## FÜGT EIN GEOTAG HINZU ########
+
     addGeoTag = function (name, latitude, longitude, hashtag) {
         var newID;
         var lastID;
@@ -50,6 +52,8 @@ class InMemoryGeoTagStore{
         this.geoTagMemory.push(geotag);
     }
 
+// ######## ENTFERNT EIN GEOTAG ANHAND DES NAMENS ########
+
     removeGeoTag = function(name) {
         const index = arr.indexOf(name);
         if (index > -1) {
@@ -57,6 +61,8 @@ class InMemoryGeoTagStore{
         }
 
     }
+
+// ######## SUCHT ALLE GEOTAGS IM RADIUS DES AKTUELLEN ZUSTANDS ######
 
     getNearbyGeoTags = function(latitude, longitude) {
         var geotags = [];
@@ -74,46 +80,57 @@ class InMemoryGeoTagStore{
         return geotags;
     }
 
+// ######## SUCHT ALLE GEOTAGS IM RADIUS DES AKTUELLEN ZUSTANDS, DIE DAS ANGEGEBENE SUCHWORT ENTHALTEN ########
+
     searchNearbyGeoTags = function(latitude, longitude, keyword, start) {
-        //Gibt Tags im Radius zurueck
-        var geotagsRadius = this.getNearbyGeoTags(latitude, longitude);
-        var geotagsAll = [];
-        var geotags = [];
+
+        var geotagsRadius = this.getNearbyGeoTags(latitude, longitude); // Gibt die Geotags im angegebenen Radius zurück
+        var geotagsAll = [];                                            // Enthält später alle gefundenenen Geotags
+        var geotags = [];                                               // Enthält später die reduzierte Anzahl Geotags für die Pagination
+
 
         //konvertiert das eingegeben keyword zu Kleinbuchstaben um die Suche case-insensitive zu machen
         var lowercaseKeyword = keyword.toLowerCase();
 
+    // #### Vertiefende Suche anhand des Radius ####
+
         //nimmt die bereits nach dem Radius gefilterten Tags und überprüft ob der Name oder das Hashtag das Keyword enthalten
-        for(i = 0; i < geotagsRadius.length; i++) {
+        for(i = 0; i < geotagsRadius.length ; i++) {
             var currentTag = geotagsRadius[i];
 
-            //konvertiert die zu suchenden Werte (name und hashtag) zu Kleinbuchstaben um die Suche case-insensitive zu machen
-            var lowercaseName = currentTag._name.toLowerCase();
-            var lowercaseHashtag = currentTag._hashtag.toLowerCase();
+            if (currentTag._name != undefined) {
 
-            if (lowercaseName.includes(lowercaseKeyword) || lowercaseHashtag.includes(lowercaseKeyword)) {
-                geotagsAll.push(currentTag);
+                //konvertiert die zu suchenden Werte (name und hashtag) zu Kleinbuchstaben um die Suche case-insensitive zu machen
+                var lowercaseName = currentTag._name.toLowerCase();
+                var lowercaseHashtag = currentTag._hashtag.toLowerCase();
+
+                if (lowercaseName.includes(lowercaseKeyword) || lowercaseHashtag.includes(lowercaseKeyword)) {
+                    geotagsAll.push(currentTag);
+                }
             }
         }
 
+    // #### Reduzierung der gefundenen Geotags (für die Pagination) ####
         var countAll = geotagsAll.length;
-        var end = start + 7; 
+        var end = Number(start) + 7; 
 
         console.log("start: ", start);
         console.log("end: ", end);
 
         for(i = start; i < end; i++) {
-            if (geotagsAll[i] != undefined) {
-            geotags.push(geotagsAll[i]);
-            console.log("geotagsAll: ", geotagsAll[i] + "geotags: ", geotags);
+            if (geotagsAll[i-1] != undefined) {
+            geotags.push(geotagsAll[i-1]);
             }
         }
 
+        // Fügt die Gesamtanzahl der gefundenenen Geotags dem Array hinzu
         countAll = {"name": undefined, "latitude": undefined, "longitude": undefined,"Anzahl": countAll};
         geotags.push(countAll);
 
         return geotags;
     }
+
+// -------------------------------------------- FUNKTIONEN FÜR DIE GET/PUT/DELETE BEFEHLE ANHAND DER ID -----------------------------------------------------------------------------
 
     searchGeoTagByID = function(id) {
         for(i = 0; i < this.geoTagMemory.length; i++) {
