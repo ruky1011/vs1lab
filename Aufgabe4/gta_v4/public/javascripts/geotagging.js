@@ -25,6 +25,8 @@ function initMapManager() {
 // Aktuelle Position vorhanden?
 // Nein? -> suche aktuelle Position und lade diese in das Tagging- und das Discovery-Formular, lade die Karte mit dem aktuellen Standort
 // Ja? -> aktualisiert die Ergebnisliste und die Map mit den Daten aus der Response
+mapInit = false;
+
 function updateLocation(response) {
 
     //Benoetigte Felder finden und speichern
@@ -39,8 +41,9 @@ function updateLocation(response) {
     var currentLongitude = longitudeFieldTag.value;
 
 
-    //überprüfen ob Position leer, nur dann muss die Position bestimmt werden
-    if(currentLatitude == '' || currentLongitude == '') {
+    // überprüfen ob Position leer, nur dann muss die Position bestimmt werden
+    // auch wenn die map nicht initialisiert wurde wird dieser Pfad aufgerufen (damit "neu laden" funktioniert)
+    if(currentLatitude == '' || currentLongitude == '' || mapInit == false) {
         // #### Callback Methode aufrufen (finden der aktuellen Position) #### 
         LocationHelper.findLocation((helper) => {
         
@@ -63,6 +66,8 @@ function updateLocation(response) {
             //Map mit aktueller Positon aktualisieren
             mapManager.initMap(latitude,longitude);
             mapManager.updateMarkers(latitude,longitude);
+
+            mapInit = true;
 
             //Platzhalter der Map entfernen
             mapView.nextElementSibling.remove();
