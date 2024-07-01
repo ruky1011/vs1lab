@@ -167,10 +167,9 @@ router.put('/api/geotags/:id', function(req, res) {
 router.delete('/api/geotags/:id', function(req, res) {
 
   var id = req.params.id;
+  console.log("ID: ", id);
 
   var geotag = geoTagStore.deleteGeoTagByID(id);
-
-  //console.log("DELETE GEOTAG: ", geoTagStore.getAllGeoTags());
 
   res.json(geotag);
 });

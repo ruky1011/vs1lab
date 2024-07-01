@@ -252,7 +252,7 @@ async function buttonClickedDiscovery(event) {
 }
 
 // #### Pagination Button wurde angeklickt ####
-async function paginationButtonClicked (page, numberOfResults) {
+async function paginationButtonClicked (page, numberOfPages) {
 
     var latitudeDiscoveryForm = document.getElementById('latitude_search').value;
     var longitudeDiscoveryForm = document.getElementById('longitude_search').value;
@@ -269,7 +269,7 @@ async function paginationButtonClicked (page, numberOfResults) {
     }
 
     console.log("clickedPage: ", clickedPage);
-    if (clickedPage >= 1 && clickedPage <=  numberOfResults) {
+    if (clickedPage >= 1 && clickedPage <=  numberOfPages) {
 
         var startElement = (7 * (clickedPage-1)) + 1;
         console.log("start Element: ", startElement);

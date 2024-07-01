@@ -146,7 +146,7 @@ class InMemoryGeoTagStore{
     }
 
     changeGeoTagByID = function(id, name, latitude, longitude, hashtag, geoTagStore) {
-        var geotag = geoTagStore.searchGeoTagID(id);
+        var geotag = geoTagStore.searchGeoTagByID(id);
         if (name != undefined) {
             geotag._name = name;
         }
@@ -169,14 +169,14 @@ class InMemoryGeoTagStore{
             //laut GitHub kein Austausch von Ressourcen, laut index.js soll gelöschtes Element zurückgegeben werden -> return ja oder nein?
             var deletedGeotag; 
             var currentGeoTag = this.geoTagMemory[i];
+
             if (currentGeoTag._id == id) {
+                console.log("currentGeotag = id");
                 this.geoTagMemory.splice(i, 1);
                 deletedGeotag = currentGeoTag;
-                break;
             }
-
-            return deletedGeotag;
         }
+            return deletedGeotag;
     }
 
     getAllGeoTags = function() {
@@ -190,8 +190,6 @@ class InMemoryGeoTagStore{
 
         return geotags;
     }
-
-
 
 }
 
